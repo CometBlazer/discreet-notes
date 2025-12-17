@@ -70,7 +70,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold">My Notes</h1>
         <button
           onClick={handleNewNote}
-          className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+          className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-gray-200 transition-colors cursor-pointer"
         >
           + New Note
         </button>

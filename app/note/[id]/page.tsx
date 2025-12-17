@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getNote, saveNote, type Note } from '@/lib/db';
-import { debounce } from '@/lib/utils';
 import DiscreteEditor from '@/components/DiscreteEditor';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved';
@@ -17,6 +16,8 @@ export default function NotePage() {
   const [isVisible, setIsVisible] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [isLoading, setIsLoading] = useState(true);
+  
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadNote = useCallback(async () => {
     try {
@@ -57,15 +58,7 @@ export default function NotePage() {
     }
   }, []);
 
-  // Debounced auto-save
-  const debouncedSave = useCallback(
-    debounce((noteToSave: Note) => {
-      persistNote(noteToSave);
-    }, 2000),
-    [persistNote]
-  );
-
-  const handleChange = (content: string, plainText: string, wordCount: number) => {
+  const handleChange = useCallback((content: string, plainText: string, wordCount: number) => {
     if (!note) return;
 
     const updatedNote: Note = {
@@ -78,15 +71,35 @@ export default function NotePage() {
 
     setNote(updatedNote);
     setSaveStatus('unsaved');
-    debouncedSave(updatedNote);
-  };
 
-  const handleSave = async () => {
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Set new timeout for auto-save
+    saveTimeoutRef.current = setTimeout(() => {
+      persistNote(updatedNote);
+    }, 2000);
+  }, [note, persistNote]);
+
+  const handleSave = useCallback(async () => {
     if (!note) return;
+    
+    // Clear any pending auto-save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
     await persistNote(note);
-  };
+  }, [note, persistNote]);
 
   const handleClose = async () => {
+    // Clear any pending auto-save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
     if (note && saveStatus !== 'saved') {
       await persistNote(note);
     }
@@ -96,11 +109,23 @@ export default function NotePage() {
   // Save on unmount
   useEffect(() => {
     return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
       if (note && saveStatus !== 'saved') {
         persistNote(note);
       }
     };
   }, [note, saveStatus, persistNote]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (isLoading) {
     return (
