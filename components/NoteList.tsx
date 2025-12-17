@@ -30,7 +30,6 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
     return (
       <div className="text-center text-neutral-500 mt-20">
         <p className="text-xl mb-2">No notes yet</p>
-        <p className="text-sm">Create your first discrete note</p>
       </div>
     );
   }
@@ -46,7 +45,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
             <h3 className="text-lg font-medium mb-2">
               Note from {new Date(note.createdAt).toLocaleDateString()}
             </h3>
-            <div className="flex items-center text-sm text-neutral-400 space-x-3">
+            <div className="flex items-center text-xs text-neutral-400 space-x-1">
               <span>Created {formatRelativeTime(note.createdAt)}</span>
               <span>•</span>
               <span>Updated {formatRelativeTime(note.updatedAt)}</span>

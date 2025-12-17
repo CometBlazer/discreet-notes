@@ -66,7 +66,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-4 max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-6 mt-4">
+      <div className="flex items-center justify-between mb-4 mt-4">
         <h1 className="text-3xl font-bold">My Notes</h1>
         <button
           onClick={handleNewNote}
@@ -76,10 +76,10 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-4">
         <SearchBar onSearch={handleSearch} />
       </div>
-      <p className="text-sm text-neutral-500 mb-2 ml-1">Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.</p>
+      <p className="text-sm text-neutral-500 mb-4 ml-1">Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.</p>
       <NoteList notes={displayedNotes} onDelete={handleDelete} />
     </main>
   );
