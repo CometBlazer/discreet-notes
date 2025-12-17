@@ -22,7 +22,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         value={query}
         onChange={handleChange}
         placeholder="Search notes..."
-        className="w-full bg-gray-900 text-white rounded-lg px-4 py-3 pl-10 focus:outline-none focus:ring-2 focus:ring-gray-700"
+        className="w-full bg-neutral-900 text-white rounded-lg px-4 py-3 pl-10 focus:outline-none focus:ring-2 focus:ring-neutral-700"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -18,12 +18,14 @@ export default function NotePage() {
   const [isLoading, setIsLoading] = useState(true);
   
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastSavedContentRef = useRef<string>('');
 
   const loadNote = useCallback(async () => {
     try {
       const existingNote = await getNote(noteId);
       if (existingNote) {
         setNote(existingNote);
+        lastSavedContentRef.current = existingNote.content;
       } else {
         // New note
         const newNote: Note = {
@@ -35,6 +37,7 @@ export default function NotePage() {
           updatedAt: Date.now(),
         };
         setNote(newNote);
+        lastSavedContentRef.current = '';
       }
     } catch (error) {
       console.error('Error loading note:', error);
@@ -48,9 +51,16 @@ export default function NotePage() {
   }, [loadNote]);
 
   const persistNote = useCallback(async (updatedNote: Note) => {
+    // Check if content has actually changed since last save
+    if (updatedNote.content === lastSavedContentRef.current) {
+      setSaveStatus('saved');
+      return;
+    }
+
     setSaveStatus('saving');
     try {
       await saveNote(updatedNote);
+      lastSavedContentRef.current = updatedNote.content;
       setSaveStatus('saved');
     } catch (error) {
       console.error('Error saving note:', error);
@@ -70,7 +80,11 @@ export default function NotePage() {
     };
 
     setNote(updatedNote);
-    setSaveStatus('unsaved');
+    
+    // Only mark as unsaved if content actually changed
+    if (content !== lastSavedContentRef.current) {
+      setSaveStatus('unsaved');
+    }
 
     // Clear existing timeout
     if (saveTimeoutRef.current) {
@@ -91,6 +105,12 @@ export default function NotePage() {
       clearTimeout(saveTimeoutRef.current);
     }
     
+    // Only save if there are actual changes
+    if (note.content === lastSavedContentRef.current) {
+      setSaveStatus('saved');
+      return;
+    }
+    
     await persistNote(note);
   }, [note, persistNote]);
 
@@ -100,7 +120,7 @@ export default function NotePage() {
       clearTimeout(saveTimeoutRef.current);
     }
     
-    if (note && saveStatus !== 'saved') {
+    if (note && note.content !== lastSavedContentRef.current) {
       await persistNote(note);
     }
     router.push('/');
@@ -112,11 +132,11 @@ export default function NotePage() {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
-      if (note && saveStatus !== 'saved') {
+      if (note && note.content !== lastSavedContentRef.current) {
         persistNote(note);
       }
     };
-  }, [note, saveStatus, persistNote]);
+  }, [note, persistNote]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -130,7 +150,7 @@ export default function NotePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-neutral-500">Loading...</p>
       </div>
     );
   }
@@ -138,7 +158,7 @@ export default function NotePage() {
   if (!note) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Note not found</p>
+        <p className="text-neutral-500">Note not found</p>
       </div>
     );
   }
@@ -146,11 +166,11 @@ export default function NotePage() {
   return (
     <main className="min-h-screen">
       {/* Header */}
-      <div className="sticky top-0 bg-black border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+      <div className="sticky top-0 bg-black border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
             onClick={handleSave}
-            className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
+            className="bg-white text-black px-4 py-2 rounded-xl font-medium hover:bg-neutral-200 transition-colors text-sm cursor-pointer"
           >
             Save
           </button>
@@ -159,7 +179,7 @@ export default function NotePage() {
               <span className="text-green-500 text-sm">✓ Saved</span>
             )}
             {saveStatus === 'saving' && (
-              <span className="text-gray-400 text-sm">Saving...</span>
+              <span className="text-neutral-400 text-sm">Saving...</span>
             )}
             {saveStatus === 'unsaved' && (
               <span className="text-yellow-500 text-sm">Unsaved</span>
@@ -170,13 +190,13 @@ export default function NotePage() {
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="text-gray-400 hover:text-white transition-colors text-sm"
+            className="text-neutral-400 hover:text-white transition-colors text-sm cursor-pointer outline-1 outline-neutral-600 px-3 py-2 rounded-xl"
           >
-            {isVisible ? '👁️ Hide Text' : '👁️ Show Text'}
+            {isVisible ? '👁️ Hide' : '👁️ Show'}
           </button>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +217,7 @@ export default function NotePage() {
       </div>
 
       {/* Word Count */}
-      <div className="text-center py-6 text-gray-400">
+      <div className="text-center py-6 text-neutral-400">
         <p className="text-2xl font-light">Word Count: {note.wordCount}</p>
       </div>
 

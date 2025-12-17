@@ -24,7 +24,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
       {notes.map((note) => (
         <div
           key={note.id}
-          className="bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-colors relative group"
+          className="bg-neutral-900 rounded-lg p-4 hover:bg-neutral-800 transition-colors relative group"
         >
           <Link href={`/note/${note.id}`} className="block">
             <h3 className="text-lg font-medium mb-2 truncate">
