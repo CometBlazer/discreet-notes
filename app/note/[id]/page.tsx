@@ -16,9 +16,31 @@ export default function NotePage() {
   const [isVisible, setIsVisible] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [isLoading, setIsLoading] = useState(true);
+  const [showHeader, setShowHeader] = useState(true);
   
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastSavedContentRef = useRef<string>('');
+  const lastScrollY = useRef(0);
+
+  // Handle scroll to show/hide header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < lastScrollY.current || currentScrollY < 10) {
+        // Scrolling up or at top
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+        // Scrolling down and past threshold
+        setShowHeader(false);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const loadNote = useCallback(async () => {
     try {
@@ -166,7 +188,9 @@ export default function NotePage() {
   return (
     <main className="min-h-screen">
       {/* Header */}
-      <div className="sticky top-0 bg-black border-b border-neutral-800 px-4 py-3 flex items-center justify-between">
+      <div className={`sticky top-0 bg-black border-b border-neutral-800 px-4 py-3 flex items-center justify-between transition-transform duration-300 z-50 ${
+          showHeader ? 'translate-y-0' : '-translate-y-full'
+        }`}>
         <div className="flex items-center space-x-4">
           <button
             onClick={handleSave}
