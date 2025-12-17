@@ -79,7 +79,7 @@ export default function Home() {
       <div className="mb-6">
         <SearchBar onSearch={handleSearch} />
       </div>
-      <p className="text-sm text-neutral-500 mb-2 ml-1">Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}</p>
+      <p className="text-sm text-neutral-500 mb-2 ml-1">Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.</p>
       <NoteList notes={displayedNotes} onDelete={handleDelete} />
     </main>
   );
