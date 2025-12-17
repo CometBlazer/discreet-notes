@@ -40,9 +40,9 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
       {notes.map((note) => (
         <div
           key={note.id}
-          className="bg-neutral-900 rounded-lg p-4 hover:bg-neutral-800 transition-colors relative group"
+          className="bg-neutral-900 rounded-lg p-4 hover:bg-neutral-800 transition-colors relative"
         >
-          <Link href={`/note/${note.id}`} className="block">
+          <Link href={`/note/${note.id}`} className="block pr-24">
             <h3 className="text-lg font-medium mb-2">
               Note from {new Date(note.createdAt).toLocaleDateString()}
             </h3>
@@ -54,36 +54,36 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
               <span>{note.wordCount} words</span>
             </div>
           </Link>
-          <div className="absolute top-4 right-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute top-4 right-4 flex items-center space-x-3">
             <button
-                onClick={(e) => handleCopy(e, note)}
-                className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
-                title="Copy note content"
+              onClick={(e) => handleCopy(e, note)}
+              className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
+              title="Copy note content"
             >
-            {copiedId === note.id ? (
+              {copiedId === note.id ? (
                 <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-green-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-green-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                <path
+                  <path
                     fillRule="evenodd"
                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                     clipRule="evenodd"
-                />
+                  />
                 </svg>
-            ) : (
+              ) : (
                 <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
-                <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+                  <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                  <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
                 </svg>
-            )}
+              )}
             </button>
             <button
               onClick={(e) => {
@@ -98,7 +98,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-6 w-6"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
