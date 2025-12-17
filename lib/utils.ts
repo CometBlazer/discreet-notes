@@ -20,7 +20,8 @@ export function getFirstLine(text: string): string {
   return firstLine.length > 50 ? firstLine.substring(0, 50) + '...' : firstLine;
 }
 
-export function debounce<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: any[]) => any>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {

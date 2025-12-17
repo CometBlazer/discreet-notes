@@ -18,11 +18,7 @@ export default function NotePage() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadNote();
-  }, [noteId]);
-
-  const loadNote = async () => {
+  const loadNote = useCallback(async () => {
     try {
       const existingNote = await getNote(noteId);
       if (existingNote) {
@@ -44,9 +40,13 @@ export default function NotePage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [noteId]);
 
-  const persistNote = async (updatedNote: Note) => {
+  useEffect(() => {
+    loadNote();
+  }, [loadNote]);
+
+  const persistNote = useCallback(async (updatedNote: Note) => {
     setSaveStatus('saving');
     try {
       await saveNote(updatedNote);
@@ -55,14 +55,14 @@ export default function NotePage() {
       console.error('Error saving note:', error);
       setSaveStatus('unsaved');
     }
-  };
+  }, []);
 
   // Debounced auto-save
   const debouncedSave = useCallback(
     debounce((noteToSave: Note) => {
       persistNote(noteToSave);
     }, 2000),
-    []
+    [persistNote]
   );
 
   const handleChange = (content: string, plainText: string, wordCount: number) => {
@@ -100,7 +100,7 @@ export default function NotePage() {
         persistNote(note);
       }
     };
-  }, [note, saveStatus]);
+  }, [note, saveStatus, persistNote]);
 
   if (isLoading) {
     return (

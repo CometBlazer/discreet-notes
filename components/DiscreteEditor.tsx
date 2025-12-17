@@ -24,6 +24,7 @@ export default function DiscreteEditor({
       CharacterCount,
     ],
     content,
+    immediatelyRender: false, // Fix SSR hydration issue
     editorProps: {
       attributes: {
         class: `prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4 ${
