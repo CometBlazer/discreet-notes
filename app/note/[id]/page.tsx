@@ -217,8 +217,8 @@ export default function NotePage() {
       </div>
 
       {/* Word Count */}
-      <div className="text-center py-6 text-neutral-400">
-        <p className="text-2xl font-light">Word Count: {note.wordCount}</p>
+      <div className="text-left px-4 pt-2 text-neutral-400">
+        <p className="text-md font-light">Word Count: {note.wordCount}</p>
       </div>
 
       {/* Editor */}

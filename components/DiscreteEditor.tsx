@@ -28,7 +28,7 @@ export default function DiscreteEditor({
     editorProps: {
       attributes: {
         class: `prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4 ${
-          isVisible ? 'text-white' : 'text-transparent caret-white'
+          isVisible ? 'text-white' : 'text-transparent caret-neutral-600'
         }`,
       },
     },
@@ -64,7 +64,7 @@ export default function DiscreteEditor({
   useEffect(() => {
     if (editor) {
       const className = `prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4 ${
-        isVisible ? 'text-white' : 'text-transparent caret-white'
+        isVisible ? 'text-white' : 'text-transparent caret-neutral-600'
       }`;
       editor.view.dom.setAttribute('class', className);
     }
