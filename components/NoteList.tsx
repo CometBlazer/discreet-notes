@@ -12,7 +12,7 @@ interface NoteListProps {
 export default function NoteList({ notes, onDelete }: NoteListProps) {
   if (notes.length === 0) {
     return (
-      <div className="text-center text-gray-500 mt-20">
+      <div className="text-center text-neutral-500 mt-20">
         <p className="text-xl mb-2">No notes yet</p>
         <p className="text-sm">Create your first discrete note</p>
       </div>
@@ -30,7 +30,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
             <h3 className="text-lg font-medium mb-2 truncate">
               {getFirstLine(note.plainText)}
             </h3>
-            <div className="flex items-center text-sm text-gray-400 space-x-3">
+            <div className="flex items-center text-sm text-neutral-400 space-x-3">
               <span>{note.wordCount} words</span>
               <span>•</span>
               <span>{formatRelativeTime(note.updatedAt)}</span>

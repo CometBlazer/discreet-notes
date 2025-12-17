@@ -59,7 +59,7 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-neutral-500">Loading...</p>
       </div>
     );
   }
@@ -70,7 +70,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold">My Notes</h1>
         <button
           onClick={handleNewNote}
-          className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-gray-200 transition-colors cursor-pointer"
+          className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-neutral-200 transition-colors cursor-pointer"
         >
           + New Note
         </button>

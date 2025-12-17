@@ -26,7 +26,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5 absolute left-3 top-3.5 text-gray-500"
+        className="h-5 w-5 absolute left-3 top-3.5 text-neutral-500"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
