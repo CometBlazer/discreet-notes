@@ -175,7 +175,7 @@ export default function NotePage() {
       {/* Bottom Navbar */}
       <div
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
-        className={`fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-neutral-800/50 px-4 pt-3 flex items-center justify-between transition-all duration-500 ease-out z-50 ${
+        className={`fixed bottom-10 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-neutral-800/50 px-4 pt-3 flex items-center justify-between transition-all duration-500 ease-out z-50 ${
           showBar ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
         }`}
       >
