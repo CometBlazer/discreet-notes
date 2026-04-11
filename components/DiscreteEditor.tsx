@@ -9,21 +9,20 @@ import { useEffect, forwardRef, useImperativeHandle } from 'react';
 interface DiscreteEditorProps {
   content: string;
   isVisible: boolean;
+  textOpacity?: number;
   onChange: (content: string, plainText: string, wordCount: number) => void;
   onSave: () => void;
 }
 
 const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditorProps>(
-  ({ content, isVisible, onChange, onSave }, ref) => {
+  ({ content, isVisible, textOpacity = 1, onChange, onSave }, ref) => {
     const editor = useEditor({
       extensions: [StarterKit, CharacterCount],
       content,
       immediatelyRender: false,
       editorProps: {
         attributes: {
-          class: `prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4 ${
-            isVisible ? 'text-white' : 'text-transparent caret-neutral-600'
-          }`,
+          class: 'prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4',
         },
       },
       onUpdate: ({ editor }) => {
@@ -34,17 +33,16 @@ const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditor
       },
     });
 
+    const textColor = isVisible ? `rgba(255,255,255,${textOpacity})` : 'transparent';
+    const caretColor = isVisible ? 'white' : 'rgb(82,82,82)';
+
     useImperativeHandle(ref, () => ({
       scrollToBottom: () => {
         if (!editor) return;
-        // Move cursor to end
         editor.commands.focus('end');
-        // Insert a few empty lines
         editor.commands.enter();
         editor.commands.enter();
-        // editor.commands.enter();
-        
-        // Scroll to bottom
+        editor.commands.enter();
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       },
     }), [editor]);
@@ -66,19 +64,17 @@ const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditor
       }
     }, [content, editor]);
 
-    useEffect(() => {
-      if (editor) {
-        const className = `prose prose-invert max-w-none focus:outline-none min-h-[calc(100vh-12rem)] p-4 ${
-          isVisible ? 'text-white' : 'text-transparent caret-neutral-600'
-        }`;
-        editor.view.dom.setAttribute('class', className);
-      }
-    }, [isVisible, editor]);
-
     if (!editor) return null;
 
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full" data-discrete-editor>
+        <style>{`
+          [data-discrete-editor] .ProseMirror,
+          [data-discrete-editor] .ProseMirror * {
+            color: ${textColor} !important;
+            caret-color: ${caretColor} !important;
+          }
+        `}</style>
         <EditorContent editor={editor} />
       </div>
     );

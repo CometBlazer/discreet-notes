@@ -16,6 +16,7 @@ export default function NotePage() {
 
   const [note, setNote] = useState<Note | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [textOpacity, setTextOpacity] = useState(0);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [isLoading, setIsLoading] = useState(true);
   const [showBar, setShowBar] = useState(true);
@@ -166,6 +167,7 @@ export default function NotePage() {
         ref={editorRef}
         content={note.content}
         isVisible={isVisible}
+        textOpacity={textOpacity}
         onChange={handleChange}
         onSave={handleSave}
       />
@@ -217,6 +219,19 @@ export default function NotePage() {
           >
             <ArrowDown className="w-4 h-4" strokeWidth={1.5} />
           </button>
+
+          {/* Opacity Slider (only when visible) */}
+          {isVisible && (
+            <input
+              type="range"
+              min="0.05"
+              max="1"
+              step="0.05"
+              value={textOpacity}
+              onChange={(e) => setTextOpacity(parseFloat(e.target.value))}
+              className="w-20 h-1 accent-neutral-500 cursor-pointer"
+            />
+          )}
 
           {/* Visibility Toggle */}
           <button
