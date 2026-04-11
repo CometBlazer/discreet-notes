@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "Discrete Notes",
   description: "A discrete notepad for private thoughts",
   manifest: "/manifest.json",
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   themeColor: "#000000",
   appleWebApp: {
     capable: true,
