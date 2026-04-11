@@ -66,22 +66,28 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen p-4 max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-4 mt-4">
-        <h1 className="text-3xl font-bold">My Notes</h1>
-        <button
-          onClick={handleNewNote}
-          className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-neutral-200 transition-colors cursor-pointer"
-        >
-          + New Note
-        </button>
+    <main className="min-h-screen p-4 max-w-2xl mx-auto flex flex-col">
+      {/* Notes list fills available space */}
+      <div className="flex-1 pt-4">
+        <p className="text-sm text-neutral-500 mb-4 ml-1">
+          Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.
+        </p>
+        <NoteList notes={displayedNotes} onDelete={handleDelete} />
       </div>
 
-      <div className="mb-4">
+      {/* Bottom section: heading, search, new note */}
+      <div className="sticky bottom-0 pb-4 pt-4 bg-black">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold">My Notes</h1>
+          <button
+            onClick={handleNewNote}
+            className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-neutral-200 transition-colors cursor-pointer"
+          >
+            + New Note
+          </button>
+        </div>
         <SearchBar onSearch={handleSearch} />
       </div>
-      <p className="text-sm text-neutral-500 mb-4 ml-1">Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.</p>
-      <NoteList notes={displayedNotes} onDelete={handleDelete} />
     </main>
   );
 }
