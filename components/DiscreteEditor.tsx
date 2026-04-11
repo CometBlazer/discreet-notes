@@ -1,3 +1,4 @@
+// components/DiscreteEditor.tsx
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
