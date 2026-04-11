@@ -76,7 +76,7 @@ export default function Home() {
       </div>
 
       {/* Bottom section: heading, search, new note */}
-      <div className="sticky bottom-0 pb-4 pt-4 bg-black">
+      <div className="sticky bottom-0 pt-4 bg-black" style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}>
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-bold">My Notes</h1>
           <button
