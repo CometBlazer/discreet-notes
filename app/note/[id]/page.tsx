@@ -16,7 +16,7 @@ export default function NotePage() {
 
   const [note, setNote] = useState<Note | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [textOpacity, setTextOpacity] = useState(1);
+  const [textOpacity, setTextOpacity] = useState(0);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [isLoading, setIsLoading] = useState(true);
   const [showBar, setShowBar] = useState(true);
