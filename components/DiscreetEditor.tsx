@@ -1,12 +1,14 @@
-// components/DiscreteEditor.tsx
 'use client';
 
+// Tiptap editor wrapper for discreet mode: text is rendered fully transparent
+// (only the caret and word count give feedback) until visibility is toggled on,
+// at which point opacity is user-adjustable.
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import CharacterCount from '@tiptap/extension-character-count';
 import { useEffect, forwardRef, useImperativeHandle } from 'react';
 
-interface DiscreteEditorProps {
+interface DiscreetEditorProps {
   content: string;
   isVisible: boolean;
   textOpacity?: number;
@@ -14,7 +16,7 @@ interface DiscreteEditorProps {
   onSave: () => void;
 }
 
-const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditorProps>(
+const DiscreetEditor = forwardRef<{ scrollToBottom: () => void }, DiscreetEditorProps>(
   ({ content, isVisible, textOpacity = 1, onChange, onSave }, ref) => {
     const editor = useEditor({
       extensions: [StarterKit, CharacterCount],
@@ -47,6 +49,7 @@ const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditor
       },
     }), [editor]);
 
+    // Ctrl/Cmd+S triggers a manual save instead of the browser dialog
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -67,10 +70,10 @@ const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditor
     if (!editor) return null;
 
     return (
-      <div className="w-full h-full" data-discrete-editor>
+      <div className="w-full h-full" data-discreet-editor>
         <style>{`
-          [data-discrete-editor] .ProseMirror,
-          [data-discrete-editor] .ProseMirror * {
+          [data-discreet-editor] .ProseMirror,
+          [data-discreet-editor] .ProseMirror * {
             color: ${textColor} !important;
             caret-color: ${caretColor} !important;
           }
@@ -81,5 +84,5 @@ const DiscreteEditor = forwardRef<{ scrollToBottom: () => void }, DiscreteEditor
   }
 );
 
-DiscreteEditor.displayName = 'DiscreteEditor';
-export default DiscreteEditor;
+DiscreetEditor.displayName = 'DiscreetEditor';
+export default DiscreetEditor;

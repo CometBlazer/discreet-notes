@@ -1,201 +1,85 @@
-# Discrete Notes 📝
+# Discreet Notes 📝
 
-A minimalist PWA notepad where you can type without seeing the content - perfect for taking notes discreetly in any situation.
+A minimalist PWA notepad where you type without seeing the content — perfect for taking notes discreetly in any situation. Only the word count tells you it's working.
 
-## ✨ Features
+**Live app: [discreetnotes.vercel.app](https://discreetnotes.vercel.app/)**
 
-- **🔒 Discrete Mode (Default)**: Type with invisible text - only the word count updates
-- **👁️ Reading Mode**: Toggle to view and edit your notes with visible text
-- **💾 Auto-Save**: Automatic saving every 2 seconds + manual save (Ctrl/Cmd+S)
-- **🔍 Smart Search**: Search notes by content or date
-- **📋 Quick Copy**: One-click copy of note content
-- **📱 PWA Support**: Install as an app on iOS and Android
-- **🌑 Dark Mode**: Sleek black interface by default
-- **🔐 100% Private**: All data stored locally on your device - never uploaded anywhere
+## Features
 
-## 🚀 Getting Started
+- **🔒 Discreet mode (default)** — type with invisible text; only the caret and word count give feedback
+- **👁️ Reading mode** — toggle visibility to view and edit, with an adjustable text-opacity slider
+- **💾 Auto-save** — notes save automatically 2 seconds after you stop typing, or instantly with Ctrl/Cmd+S
+- **🔍 Search** — live full-text search across all notes from the floating dock
+- **📋 Quick copy** — one-click copy of any note's content
+- **📱 Installable PWA** — add to your home screen on iOS and Android; works fully offline
+- **🔐 100% private** — everything lives in your browser's IndexedDB; no server, no accounts, no tracking
 
-### Prerequisites
+## How it works
 
-- Node.js 18+ and npm
+Notes are edited in a [Tiptap](https://tiptap.dev/) rich-text editor whose text color is rendered fully transparent in discreet mode, so keystrokes land normally but nothing is readable on screen. Content persists to IndexedDB on-device, and a service worker precaches the app shell so the whole thing runs offline after the first load. Nothing ever leaves your device.
 
-### Installation
+## Getting started
 
-1. Clone the repository:
+Requires Node.js 18+ and npm.
+
 ```bash
-git clone https://github.com/CometBlazer/discrete-notes.git
-cd discrete-notes
-```
-
-2. Install dependencies:
-```bash
+git clone https://github.com/CometBlazer/discreet-notes.git
+cd discreet-notes
 npm install
-```
-
-3. Run the development server:
-```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📱 Installing as PWA
+## Usage
 
-### iPhone (Safari)
-1. Open the app in Safari
-2. Tap the **Share** button (square with arrow pointing up)
-3. Scroll down and tap **"Add to Home Screen"**
-4. Tap **"Add"**
-5. The app icon will appear on your home screen
+1. Tap **+** to create a note and just start typing — you won't see the text, but the word count will climb.
+2. Use the eye icon in the bottom toolbar to reveal the text (and the slider to control its opacity).
+3. Notes auto-save as you type; Ctrl/Cmd+S saves immediately.
+4. Back on the dashboard, search, copy, or delete notes; everything is stored locally.
 
-### Android (Chrome)
-1. Open the app in Chrome
-2. Tap the three-dot menu (⋮)
-3. Tap **"Install app"** or **"Add to Home Screen"**
-4. Confirm installation
-5. The app icon will appear on your home screen
+### Installing as an app
 
-## 🎯 How to Use
+- **iOS (Safari):** Share → **Add to Home Screen**
+- **Android (Chrome):** ⋮ menu → **Install app**
 
-### Creating a Note
-1. Click **"+ New Note"** on the dashboard
-2. Start typing - you won't see the text!
-3. Watch the word count update as you type
-4. Your note auto-saves every 2 seconds
+## Tech stack
 
-### Viewing Your Notes
-1. Click any note on the dashboard to open it
-2. It opens in discrete mode (invisible text)
-3. Click **"👁️ Show Text"** to reveal the content
-4. Click **"👁️ Hide Text"** to return to discrete mode
+- [Next.js](https://nextjs.org/) 16 (App Router) + [TypeScript](https://www.typescriptlang.org/)
+- [Tiptap](https://tiptap.dev/) rich-text editor
+- [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) via [`idb`](https://github.com/jakearchibald/idb)
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- Custom service worker for offline support
 
-### Other Features
-- **Search**: Use the search bar to find notes by content or date
-- **Copy**: Hover over a note and click the copy icon
-- **Delete**: Hover over a note and click the trash icon
-- **Save**: Press **Ctrl+S** (or **Cmd+S** on Mac) to save manually
-
-## 🛠️ Tech Stack
-
-- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
-- **[Tiptap](https://tiptap.dev/)** - Rich text editor
-- **[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)** (via `idb`) - Local database
-- **[Tailwind CSS](https://tailwindcss.com/)** - Styling
-- **PWA** - Progressive Web App capabilities
-
-## 📁 Project Structure
+## Project structure
 
 ```
-discrete-notes/
+discreet-notes/
 ├── app/
-│   ├── layout.tsx              # Root layout with PWA setup
-│   ├── page.tsx                # Dashboard (home page)
-│   ├── globals.css             # Global styles
-│   └── note/[id]/
-│       └── page.tsx            # Note editor page
+│   ├── layout.tsx            # Root layout, PWA metadata
+│   ├── page.tsx              # Dashboard: note list, search, floating dock
+│   └── note/[id]/page.tsx    # Editor page with autosave + toolbar
 ├── components/
-│   ├── DiscreteEditor.tsx      # Tiptap editor wrapper
-│   ├── NoteList.tsx            # List of notes
-│   ├── SearchBar.tsx           # Search component
-│   └── PWARegister.tsx         # Service worker registration
+│   ├── DiscreetEditor.tsx    # Tiptap wrapper with invisible-text rendering
+│   ├── NoteList.tsx          # Note cards with copy/delete
+│   ├── SearchBar.tsx         # Floating search input
+│   └── PWARegister.tsx       # Service worker registration
 ├── lib/
-│   ├── db.ts                   # IndexedDB functions
-│   └── utils.ts                # Utility functions
+│   ├── db.ts                 # IndexedDB persistence
+│   └── utils.ts              # Formatting helpers
 └── public/
-    ├── manifest.json           # PWA manifest
-    ├── service-worker.js       # Service worker
-    ├── icon-192.png            # App icon (192x192)
-    └── icon-512.png            # App icon (512x512)
+    ├── manifest.json         # PWA manifest
+    └── service-worker.js     # Offline caching
 ```
 
-## ⚙️ Configuration
+## Privacy
 
-### Change Auto-Save Delay
+All notes are stored in your browser's IndexedDB and never transmitted anywhere. There is no backend, no analytics, and no tracking. Clearing your browser's site data deletes your notes — export anything important first.
 
-Edit `/app/note/[id]/page.tsx` and modify the timeout value:
+## Deployment
 
-```typescript
-saveTimeoutRef.current = setTimeout(() => {
-  persistNote(updatedNote);
-}, 2000); // Change 2000 to your preferred milliseconds
-```
+Deploys as a standard Next.js app. On [Vercel](https://vercel.com/), just import the repository; no environment variables are needed.
 
-### Customize Colors
+## License
 
-Edit `/app/globals.css` or modify Tailwind classes in components.
-
-### Custom Icons
-
-Replace `/public/icon-192.png` and `/public/icon-512.png` with your own 192x192 and 512x512 PNG images.
-
-## 🔒 Privacy & Data
-
-- **Local Storage Only**: All notes are stored in your browser's IndexedDB
-- **No Server**: Nothing is ever sent to any server
-- **No Tracking**: No analytics or tracking of any kind
-- **Offline First**: Works completely offline after initial load
-- **Your Device Only**: Data stays on your device unless you manually export
-
-## 🐛 Troubleshooting
-
-### PWA Won't Install
-- Ensure you're using HTTPS (localhost is OK for testing)
-- Check browser console for errors
-- Verify `manifest.json` is accessible at `/manifest.json`
-- Make sure icon files exist in `/public` folder
-
-### Notes Not Saving
-- Check browser console for IndexedDB errors
-- Ensure you're not in private/incognito mode
-- Try clearing browser cache and reload
-
-### Service Worker Issues
-1. Open DevTools → Application → Service Workers
-2. Click "Unregister"
-3. Refresh the page
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
-
-### Netlify
-1. Connect your Git repository
-2. Build command: `npm run build`
-3. Publish directory: `.next`
-
-### Other Platforms
-Build the project and deploy the `.next` folder:
-```bash
-npm run build
-npm start
-```
-
-## 📄 License
-
-MIT License - feel free to use this project however you'd like!
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
-## 💡 Use Cases
-
-- Taking notes in meetings without drawing attention
-- Journaling in public spaces
-- Quick thought capture without distractions
-- Private note-taking on shared devices
-- Reducing screen time anxiety
-
-## ⌨️ Keyboard Shortcuts
-
-- **Ctrl/Cmd + S**: Save note immediately
-- **Esc**: (Future) Quick exit to dashboard
-
----
-
-Made with ❤️ for discrete note-taking
+[MIT](LICENSE)

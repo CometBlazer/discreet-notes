@@ -1,4 +1,6 @@
-const CACHE_NAME = 'discrete-notes-v2';
+// Offline-first service worker: precaches the app shell, then serves
+// cached responses while revalidating in the background.
+const CACHE_NAME = 'discreet-notes-v3';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',

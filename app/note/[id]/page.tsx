@@ -1,10 +1,11 @@
-// app/note/[id]/page.tsx
 'use client';
 
+// Note editor page: discreet (invisible-text) editor with a 2s debounced
+// autosave, Ctrl/Cmd+S manual save, and a bottom toolbar that hides on scroll.
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getNote, saveNote, type Note } from '@/lib/db';
-import DiscreteEditor from '@/components/DiscreteEditor';
+import DiscreetEditor from '@/components/DiscreetEditor';
 import { Save, Eye, EyeOff, X, Check, Loader2, Circle, ArrowDown } from 'lucide-react';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved';
@@ -163,7 +164,7 @@ export default function NotePage() {
       </div>
 
       {/* Editor */}
-      <DiscreteEditor
+      <DiscreetEditor
         ref={editorRef}
         content={note.content}
         isVisible={isVisible}
@@ -175,7 +176,7 @@ export default function NotePage() {
       {/* Bottom Navbar */}
       <div
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
-        className={`fixed bottom-10 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-neutral-800/50 px-4 pt-3 flex items-center justify-between transition-all duration-500 ease-out z-50 ${
+        className={`fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-neutral-800/50 px-4 pt-3 flex items-center justify-between transition-all duration-500 ease-out z-50 ${
           showBar ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
         }`}
       >

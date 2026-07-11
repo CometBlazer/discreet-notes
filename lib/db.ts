@@ -1,8 +1,9 @@
+// IndexedDB persistence for notes (via idb). All data stays on-device.
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
 export interface Note {
   id: string;
-  content: string;
+  content: string; // Tiptap HTML
   plainText: string;
   wordCount: number;
   createdAt: number;
@@ -17,6 +18,8 @@ interface NotesDB extends DBSchema {
   };
 }
 
+// Keeps the original database name so existing users' notes survive the
+// project's rename from "Discrete Notes" to "Discreet Notes".
 const DB_NAME = 'discrete-notes-db';
 const STORE_NAME = 'notes';
 
@@ -59,8 +62,8 @@ export async function deleteNote(id: string): Promise<void> {
 export async function searchNotes(query: string): Promise<Note[]> {
   const allNotes = await getAllNotes();
   const lowerQuery = query.toLowerCase();
-  
-  return allNotes.filter(note => 
+
+  return allNotes.filter((note) =>
     note.plainText.toLowerCase().includes(lowerQuery)
   );
 }

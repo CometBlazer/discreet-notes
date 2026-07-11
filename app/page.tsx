@@ -1,6 +1,7 @@
-// app/page.tsx
 'use client';
 
+// Home: note list with live search and a floating bottom dock
+// (search bar + new-note button) that stays clear of mobile safe areas.
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
@@ -66,27 +67,34 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen p-4 max-w-2xl mx-auto flex flex-col">
-      {/* Notes list fills available space */}
-      <div className="flex-1 pt-4">
-        <p className="text-sm text-neutral-500 mb-4 ml-1">
-          Last updated: {displayedNotes.length > 0 ? new Date(displayedNotes[0].updatedAt).toLocaleString() : 'No notes available'}. Format is MM/DD/YY.
-        </p>
+    <main className="min-h-screen max-w-2xl mx-auto px-4">
+      <header className="flex items-center justify-between pt-6 pb-4">
+        <h1 className="text-3xl font-bold">My Notes</h1>
+        <span className="text-sm text-neutral-500">
+          {notes.length} {notes.length === 1 ? 'note' : 'notes'}
+        </span>
+      </header>
+
+      {/* Bottom padding keeps the last notes visible above the floating dock */}
+      <div className="pb-32">
         <NoteList notes={displayedNotes} onDelete={handleDelete} />
       </div>
 
-      {/* Bottom section: heading, search, new note */}
-      <div className="sticky bottom-10 pt-4 bg-black" style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}>
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold">My Notes</h1>
+      {/* Floating dock: search + new note */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-50 px-4 pt-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none"
+        style={{ paddingBottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <div className="mx-auto flex max-w-2xl items-center gap-3 pointer-events-auto">
+          <SearchBar onSearch={handleSearch} />
           <button
             onClick={handleNewNote}
-            className="bg-white text-black px-4 py-2 rounded-2xl font-medium hover:bg-neutral-200 transition-colors cursor-pointer"
+            aria-label="New note"
+            className="h-12 w-12 shrink-0 rounded-full bg-white text-black text-2xl leading-none shadow-lg hover:bg-neutral-200 transition-colors cursor-pointer"
           >
-            + New Note
+            +
           </button>
         </div>
-        <SearchBar onSearch={handleSearch} />
       </div>
     </main>
   );

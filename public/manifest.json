@@ -1,7 +1,7 @@
 {
-  "name": "Discrete Notes",
-  "short_name": "Discrete",
-  "description": "A discrete notepad for private thoughts",
+  "name": "Discreet Notes",
+  "short_name": "Discreet",
+  "description": "A discreet notepad for private thoughts",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

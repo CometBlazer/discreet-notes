@@ -1,10 +1,10 @@
-// components/NoteList.tsx
 'use client';
 
 import Link from 'next/link';
 import { Note } from '@/lib/db';
 import { formatRelativeTime } from '@/lib/utils';
 import { useState } from 'react';
+import { Copy, Check, Trash2 } from 'lucide-react';
 
 interface NoteListProps {
   notes: Note[];
@@ -17,7 +17,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
   const handleCopy = async (e: React.MouseEvent, note: Note) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     try {
       await navigator.clipboard.writeText(note.plainText);
       setCopiedId(note.id);
@@ -61,28 +61,9 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
               title="Copy note content"
             >
               {copiedId === note.id ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-green-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <Check className="h-5 w-5 text-green-500" strokeWidth={2} />
               ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
-                  <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
-                </svg>
+                <Copy className="h-5 w-5" strokeWidth={2} />
               )}
             </button>
             <button
@@ -96,18 +77,7 @@ export default function NoteList({ notes, onDelete }: NoteListProps) {
               className="text-red-500 hover:text-red-400 transition-colors cursor-pointer"
               title="Delete note"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <Trash2 className="h-5 w-5" strokeWidth={2} />
             </button>
           </div>
         </div>
